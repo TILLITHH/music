@@ -3,54 +3,36 @@
 <head>
 
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Spotify NFC</title>
 
 <style>
 
 body{
-
-background:#121212;
-
-font-family:Arial;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-height:100vh;
-
-margin:0;
-
-color:white;
-
+    background:#121212;
+    font-family:Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+    color:white;
 }
 
 .card{
-
-text-align:center;
-
-width:320px;
-
+    text-align:center;
+    width:320px;
 }
 
 img{
-
-width:100%;
-
-border-radius:20px;
-
-box-shadow:0 10px 30px rgba(0,0,0,.4);
-
+    width:100%;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
 }
 
 .button{
-    display:inline-block;
+    display:none;
     margin-top:20px;
     padding:15px 25px;
     font-size:18px;
@@ -72,9 +54,9 @@ box-shadow:0 10px 30px rgba(0,0,0,.4);
 
 <h2 id="title"></h2>
 
-<p>Abriendo Spotify...</p>
+<p id="status">Abriendo Spotify...</p>
 
-<a id="open" href="#" class="button" style="display:none;">
+<a id="open" class="button">
     Abrir en Spotify
 </a>
 
@@ -82,51 +64,61 @@ box-shadow:0 10px 30px rgba(0,0,0,.4);
 
 <script>
 
-const albums={
+const albums = {
 
-sanctuary:{
+    sanctuary: {
 
-title:"TXT - The Star Chapter: SANCTUARY",
+        title: "TXT - The Star Chapter: SANCTUARY",
 
-cover:"covers/sanctuary.jpg",
+        cover: "covers/sanctuary.jpg",
 
-spotify:"https://open.spotify.com/album/72JboNccBYyXR676YNfcYE",
+        spotify: "https://open.spotify.com/album/72JboNccBYyXR676YNfcYE",
 
-uri:"spotify:album:72JboNccBYyXR676YNfcYE"
+        uri: "spotify:album:72JboNccBYyXR676YNfcYE"
+
+    }
+
+};
+
+// Obtener parámetro de la URL
+const params = new URLSearchParams(window.location.search);
+const id = params.get("album");
+const album = albums[id];
+
+// Validar que exista
+if (!album) {
+
+    document.getElementById("status").textContent = "Álbum no encontrado.";
+    throw new Error("Álbum no encontrado.");
 
 }
 
-}
-
-const params=new URLSearchParams(location.search);
-
-const id=params.get("album");
-
-const album=albums[id];
-
-document.getElementById("title").textContent=album.title;
-
-document.getElementById("cover").src=album.cover;
+// Mostrar información
+document.getElementById("title").textContent = album.title;
+document.getElementById("cover").src = album.cover;
 
 const openButton = document.getElementById("open");
 
-// El botón abrirá la versión web
+// El botón abrirá Spotify Web
 openButton.href = album.spotify;
 
-// Intentar abrir la app
+// Intentar abrir Spotify automáticamente
 setTimeout(() => {
+
     window.location.href = album.uri;
+
 }, 300);
 
-// Si después de 2 segundos seguimos en la página,
+// Si después de 2 segundos seguimos aquí,
 // mostramos el botón para abrir Spotify Web.
 setTimeout(() => {
-    openButton.style.display = "inline-block";
-}, 2000);
 
-// Si no se abrió la app, el botón sigue apuntando a Spotify Web
-openButton.href = album.spotify;
-});
+    document.getElementById("status").textContent =
+        "Si Spotify no se abrió automáticamente, pulsa el botón.";
+
+    openButton.style.display = "inline-block";
+
+}, 2000);
 
 </script>
 
