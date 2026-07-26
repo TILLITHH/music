@@ -49,24 +49,15 @@ box-shadow:0 10px 30px rgba(0,0,0,.4);
 
 }
 
-button{
-
-margin-top:20px;
-
-padding:15px 25px;
-
-font-size:18px;
-
-border:none;
-
-border-radius:999px;
-
-background:#1DB954;
-
-color:white;
-
-cursor:pointer;
-
+.button{
+    display:inline-block;
+    margin-top:20px;
+    padding:15px 25px;
+    font-size:18px;
+    border-radius:999px;
+    background:#1DB954;
+    color:white;
+    text-decoration:none;
 }
 
 </style>
@@ -83,9 +74,9 @@ cursor:pointer;
 
 <p>Abriendo Spotify...</p>
 
-<button id="open">
-Abrir Spotify
-</button>
+<a id="open" href="#" class="button">
+    Abrir en Spotify
+</a>
 
 </div>
 
@@ -117,19 +108,18 @@ document.getElementById("title").textContent=album.title;
 
 document.getElementById("cover").src=album.cover;
 
-document.getElementById("open").onclick=()=>{
+const openButton = document.getElementById("open");
 
-location.href=album.spotify;
+// El botón intentará abrir la app
+openButton.href = album.uri;
 
-}
-
-location.href=album.uri;
-
-setTimeout(()=>{
-
-location.href=album.spotify;
-
-},1500);
+// Si el usuario mantiene pulsado o el navegador no soporta spotify:,
+// también podrá abrir la versión web manualmente.
+openButton.addEventListener("click", () => {
+    setTimeout(() => {
+        window.location.href = album.spotify;
+    }, 1500);
+});
 
 </script>
 
