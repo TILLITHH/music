@@ -111,14 +111,18 @@ document.getElementById("cover").src=album.cover;
 const openButton = document.getElementById("open");
 
 // El botón intentará abrir la app
-openButton.href = album.uri;
+openButton.href = album.spotify;
 
 // Si el usuario mantiene pulsado o el navegador no soporta spotify:,
 // también podrá abrir la versión web manualmente.
 openButton.addEventListener("click", () => {
-    setTimeout(() => {
-        window.location.href = album.spotify;
-    }, 1500);
+// Intento automático de abrir la app
+setTimeout(() => {
+    window.location.href = album.uri;
+}, 300);
+
+// Si no se abrió la app, el botón sigue apuntando a Spotify Web
+openButton.href = album.spotify;
 });
 
 </script>
